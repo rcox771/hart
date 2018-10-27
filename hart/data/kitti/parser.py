@@ -48,7 +48,7 @@ def to_array_list(df, length=None, by_id=True):
     if length is None:
         length = max(idx) + 1
 
-    l = [np.empty(0) for _ in xrange(length)]
+    l = [np.empty(0) for _ in range(length)]
     for i in idx:
         a = df.loc[i]
         if by_id:

@@ -21,7 +21,7 @@
 
 import threading
 import weakref
-import Queue
+from queue import Queue
 
 import tensorflow as tf
 from tensorflow.python.util import nest
@@ -246,7 +246,7 @@ def run_py2tf_queue(py_queue_or_deque_op, dtypes, shapes=None, names=None, trans
     # set shapes to dequeue ops
     if shapes is not None:
         if names is None:
-            names = xrange(len(shapes))
+            names = range(len(shapes))
         for k, s in zip(names, shapes):
             dequeue_op[k].set_shape(s)
 

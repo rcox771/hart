@@ -22,9 +22,9 @@
 import numpy as np
 import tensorflow as tf
 
-from neurocity.component.model import Model
-from neurocity.component import loss as _loss
-from neurocity.tensor_ops import convert_shape, broadcast_against
+from hart.neurocity.component.model.model  import Model
+from hart.neurocity.component import loss as _loss
+from hart.neurocity.tensor_ops import convert_shape, broadcast_against
 
 from hart.model.attention_ops import AttentionCell, RATMAttention
 from hart.train_tools import AdaptiveLoss

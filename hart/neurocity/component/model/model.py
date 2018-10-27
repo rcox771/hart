@@ -20,7 +20,7 @@
 ########################################################################################
 import tensorflow as tf
 
-from neurocity.component.model import base
+from hart.neurocity.component.model import base
 
 
 class Model(base.BaseModel):

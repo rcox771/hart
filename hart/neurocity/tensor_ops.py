@@ -33,7 +33,7 @@ def convert_shape(shape, dtype=np.int32):
     if not isinstance(shape, tf.TensorShape):
         return shape
 
-    ss = map(lambda x: x if x is not None else -1, shape.as_list())
+    ss = list(map(lambda x: x if x is not None else -1, shape.as_list()))
 
     return np.asarray(ss, dtype=dtype)
 

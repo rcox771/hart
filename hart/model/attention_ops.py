@@ -21,22 +21,26 @@
 
 import numpy as np
 import tensorflow as tf
-from tensorflow.contrib.rnn.python.ops.core_rnn_cell_impl import LSTMCell
-from tensorflow.python.ops.rnn_cell_impl import _RNNCell as RNNCell
+#from tensorflow.python.ops.rnn_cell_impl import LSTMCell
+#from tensorflow.python.ops.rnn_cell_impl import RNNCell
+
+from tensorflow.python.ops.rnn_cell_impl import RNNCell
+from tensorflow.python.ops.rnn_cell_impl import LSTMCell
+
 from tensorflow.python.util import nest
 
 from hart.model import tensor_ops
 from hart.model.nn import DynamicFilterModel
 from hart.model.rnn import ZoneoutWrapper, IdentityLSTMCell
-from neurocity.component.layer import AffineLayer, ConvLayer
-from neurocity.tensor_ops import convert_shape
+from hart.neurocity.component.layer import AffineLayer, ConvLayer
+from hart.neurocity.tensor_ops import convert_shape
 
 
 def gaussian_mask(params, R, C):
     """Define a mask of size RxC given by one 1-D Gaussian per row.
 
     u, s and d must be 1-dimensional vectors"""
-    u, s, d = (params[..., i] for i in xrange(3))
+    u, s, d = (params[..., i] for i in range(3))
 
     for i in (u, s, d):
         assert len(u.get_shape()) == 1, i
@@ -155,7 +159,7 @@ class RATMAttention(Attention):
 
     @staticmethod
     def _to_axis_attention(params, glimpse_dim, inpt_dim):
-        u, s, d = (params[..., i] for i in xrange(RATMAttention.n_params // 2))
+        u, s, d = (params[..., i] for i in range(RATMAttention.n_params // 2))
         u = u * inpt_dim
         s = (s + 1e-5) * float(inpt_dim) / glimpse_dim
         d = d * float(inpt_dim - 1) / (glimpse_dim - 1)

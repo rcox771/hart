@@ -25,9 +25,9 @@ import tensorflow as tf
 from tensorflow.python.util import nest
 
 from hart.model.alexnet import alexnet
-from neurocity.component.model import Model
-from neurocity.tensor_ops import convert_shape
-from neurocity.component.layer import (ensure_square, Layer, AffineLayer, ConvLayer, DropoutLayer, LayerNormLayer,
+from hart.neurocity.component.model.model  import Model
+from hart.neurocity.tensor_ops import convert_shape
+from hart.neurocity.component.layer import (ensure_square, Layer, AffineLayer, ConvLayer, DropoutLayer, LayerNormLayer,
                                        BatchNormLayer, DynamicFilterConvLayer)
 
 
@@ -82,7 +82,7 @@ class DynamicFilterModel(Model):
         n_dfn_filter_params = n_inpt_channels * self.n_channels * np.prod(self.ksize)
 
         filter_inpt = self.filter_inpt
-        for i in xrange(1, self.n_param_layers):
+        for i in range(1, self.n_param_layers):
             filter_inpt = AffineLayer(filter_inpt, filter_inpt.get_shape().as_list()[-1],
                                       transfer=tf.nn.elu, name='param_layer_{}'.format(i))
 
@@ -143,7 +143,7 @@ class AlexNetModel(FeatureExtractor):
         inpt = self.inpt
         if self.upsample:
             inpt = tf.image.resize_bilinear(inpt, (227, 227))
-        o = alexnet(inpt, np.load(self.path).item(), self.layer, maxpool=self.upsample)
+        o = alexnet(inpt, np.load(self.path, encoding='latin1').item(), self.layer, maxpool=self.upsample)
         self.orig_output = o
 
         if 'maxpool' or 'conv' in self.layer:

@@ -19,8 +19,10 @@
 # 
 ########################################################################################
 
-from itertools import izip
-
+try:
+    from itertools import izip as zip
+except ImportError: # will be 3.x series
+    pass
 import matplotlib
 import numpy as np
 
@@ -139,8 +141,8 @@ def anim_tracks_in_images(imgs, bboxes, glimpses=None, fps=30, save_as=None, dpi
 
         ax = plt.subplot(gs[0, :])
         glimpse_axes = np.empty((n_rows - 1, glimpses_per_row), dtype=object)
-        for i in xrange(glimpse_axes.shape[0]):
-            for j in xrange(glimpse_axes.shape[1]):
+        for i in range(glimpse_axes.shape[0]):
+            for j in range(glimpse_axes.shape[1]):
                 glimpse_axes[i, j] = plt.subplot(gs[1 + i, j])
 
         glimpse_axes = glimpse_axes.flatten()
@@ -227,7 +229,7 @@ def tile(imgs, glimpses, bboxes, fig_size=(1, 1), img_size=(1, 1), mode='vertica
     colors = 'rgbc'
     # extract y, x, h, w
     for k in bboxes.keys():
-        bboxes[k] = [bboxes[k][..., i] for i in xrange(4)]
+        bboxes[k] = [bboxes[k][..., i] for i in range(4)]
 
     if mode == 'vertical':
         fig, axes = _tile_vertical(imgs, glimpses, bboxes, n_objects, fig_size, img_size, colors)
@@ -263,25 +265,25 @@ def _tile_vertical(imgs, glimpses, boxes, n_objects, fig_size, img_size, colors)
 
     axes = np.empty((yy, xx), dtype=object)
     ii = 0
-    for i in xrange(yy):
+    for i in range(yy):
         axes[i, 0] = plt.subplot(gs[i * img_y:(i + 1) * img_y, :img_x])
 
-    for i in xrange(yy):
-        for j in xrange(1, xx):
+    for i in range(yy):
+        for j in range(1, xx):
             axes[i, j] = plt.subplot(gs[i * img_y:(i + 1) * img_y, j + img_x - 1])
 
     # plot
-    for r in xrange(yy):
+    for r in range(yy):
         axes[r, 0].imshow(imgs[r], 'gray')
 
-        for n in xrange(n_objects):
+        for n in range(n_objects):
             for (k, v), color in izip(boxes.iteritems(), colors):
                 y, x, h, w = boxes[k]
                 bbox = Rectangle((x[r, n], y[r, n]), w[r, n], h[r, n],
                                  edgecolor=color, facecolor='none', label=k)
                 axes[r, 0].add_patch(bbox)
 
-        for c in xrange(1, xx):
+        for c in range(1, xx):
             axes[r, c].imshow(glimpses[r, c - 1], 'gray')
 
     # TODO: improve
@@ -309,23 +311,23 @@ def _tile_horizontal(imgs, glimpses, boxes, n_objects, fig_size, img_size, color
     axes = np.empty((yy, xx), dtype=object)
 
     ii = 0
-    for i in xrange(yy):
+    for i in range(yy):
         if i % n_rows == 0:
-            for j in xrange(xx):
+            for j in range(xx):
                 axes[i, j] = plt.subplot(gs[ii:ii + img_y, j * img_x:(j + 1) * img_x])
             ii += img_y
         else:
-            for j in xrange(xx):
+            for j in range(xx):
                 axes[i, j] = plt.subplot(gs[ii, j * img_x + img_x // 2])
             ii += 1
 
-    for r in xrange(0, yy, n_rows):
-        for c in xrange(xx):
+    for r in range(0, yy, n_rows):
+        for c in range(xx):
             idx = (r // n_rows) * xx + c
             if idx < nt:
                 axes[r, c].imshow(imgs[idx], 'gray')
 
-                for n in xrange(n_objects):
+                for n in range(n_objects):
                     for (k, v), color in izip(boxes.iteritems(), colors):
                         y, x, h, w = boxes[k]
                         bbox = Rectangle((x[idx, n], y[idx, n]), w[idx, n], h[idx, n],

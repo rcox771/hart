@@ -22,8 +22,8 @@ Created on Fri Dec 16 10:32:11 2016
 """
 
 import tensorflow as tf
-from layer import Layer
-from model.model import Model
+from hart.neurocity.component.layer import Layer
+from hart.neurocity.component.model.model import Model
 
 def convert_layer_to_tensor(layer, dtype=None, name=None, as_ref=False):
     if not isinstance(layer, (Layer, Model)):

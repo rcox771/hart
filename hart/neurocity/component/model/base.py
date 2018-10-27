@@ -41,7 +41,7 @@ class BaseModel(object):
         self.train_mode()
 
     def register(self, layer):
-        Layer = importlib.import_module('neurocity.component.layer').Layer
+        Layer = importlib.import_module('hart.neurocity.component.layer').Layer
         if not isinstance(layer, (BaseModel, Layer)):
             raise ValueError('{} is not derived from BaseModel or Layer classes'.format(layer))
         self.layers.append(layer)

@@ -121,7 +121,7 @@ model = HART(x, y[0], p[0], batch_size, crop_size, builder,
 # In[4]:
 
 schedule.train_store = train_store
-print 'Num Test Batches: {}'.format(test_store.n_batches_per_epoch)
+print('Num Test Batches: {}'.format(test_store.n_batches_per_epoch))
 
 # In[5]:
 
@@ -185,7 +185,7 @@ def log_imgs(n_seqs=1, test=False):
         fd = None
         prefix = 'train'
 
-    for n in xrange(n_seqs):
+    for n in range(n_seqs):
         name = '{}_iter_{}_seq_{}.png'.format(prefix, train_itr, n)
         name = os.path.join(log_dir, name)
         outputs = sess.run([x, y, p, model.pred_bbox, model.att_pred_bbox, model.glimpse], fd)
@@ -224,7 +224,7 @@ for train_itr in schedule:
         writer.add_summary(summary, train_itr)
 
         schedule.report_score(train_loss['loss/iou'])
-        print sess.run(model.cell.att_bias)
+        print(sess.run(model.cell.att_bias))
 
     sess.run(train_step)
 

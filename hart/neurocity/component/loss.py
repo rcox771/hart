@@ -22,7 +22,7 @@
 import inspect
 import tensorflow as tf
 
-from neurocity.tensor_ops import broadcast_against
+from hart.neurocity.tensor_ops import broadcast_against
 
 
 def _points_per_mask_entry(data, mask):

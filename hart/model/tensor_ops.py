@@ -20,7 +20,7 @@
 ########################################################################################
 
 import tensorflow as tf
-from neurocity.tensor_ops import broadcast_against
+from hart.neurocity.tensor_ops import broadcast_against
 
 
 def dynamic_truncate(v, t_max):

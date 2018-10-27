@@ -25,10 +25,10 @@ from threading import Lock
 import numpy as np
 import tensorflow as tf
 
-import neurocity as nct
-from neurocity.data import store
-from neurocity.data import tools as data_tools
-from parser import KittiTrackingParser
+from hart import neurocity as nct
+from hart.neurocity.data import store
+from hart.neurocity.data import tools as data_tools
+from hart.data.kitti.parser import KittiTrackingParser
 
 try:
     from cv2 import imread, imresize
@@ -101,7 +101,7 @@ def split_sequence_dict(data_dict, fraction=.5):
 
     for k, v in data_dict.iteritems():
         a[k], b[k] = [], []
-        for i in xrange(len(v)):
+        for i in range(len(v)):
             sa, sb = split_sequence(v[i], fraction)
             if sa is not None:
                 a[k].append(sa)
@@ -126,7 +126,7 @@ def resample_sequence_dict(data, max_len, overlap):
     for k, v in data.iteritems():
         # TODO: fix 0-length splits in split_seq_list
         data[k] = data_tools.split_seq_list(data[k], max_len, overlap)
-        for i in reversed(xrange(len(data[k]))):
+        for i in reversed(range(len(data[k]))):
             if len(data[k][i]) == 0:
                 del data[k][i]
     return data
@@ -141,7 +141,7 @@ def sample_permutations(data, size, num_samples):
     :return: list of permuted `data`
     """
 
-    perms = {tuple(np.random.permutation(data.shape[0])[:size]) for _ in xrange(num_samples)}
+    perms = {tuple(np.random.permutation(data.shape[0])[:size]) for _ in range(num_samples)}
     ws = [data[list(p)] for p in perms]
     return ws
 
@@ -157,8 +157,8 @@ def choose_n_objects(img_paths, bbox, presence, n_objects, choice_fun=default_ch
     obj_indices = np.where(presence[0])[0]
     obj_indices = choice_fun(obj_indices, n)
 
-    ip, b, p = outputs = [[] for _ in xrange(3)]
-    # other_data = [[] for _ in xrange(len(data))]
+    ip, b, p = outputs = [[] for _ in range(3)]
+    # other_data = [[] for _ in range(len(data))]
     for obj_index in obj_indices:
         pp = presence[:, obj_index]
 
@@ -213,14 +213,14 @@ def sequences(data, max_len=None, shuffle=True, overlap=0, max_objects=None, sam
             choice_fun = lambda x, n: sample_permutations(x, n,
                                                           max(1, abs(sample_objects) * (x.shape[0] // max_objects)))
         elif sample_objects >= 1:
-            choice_fun = lambda x, n: [x[np.random.permutation(x.shape[0])[:n]] for _ in xrange(sample_objects)]
+            choice_fun = lambda x, n: [x[np.random.permutation(x.shape[0])[:n]] for _ in range(sample_objects)]
         else:
             choice_fun = default_choice_fun
 
         keys = ['img_path', 'bbox', 'presence']
         ip, b, p = (data[k] for k in keys)
         new_data = {k: [] for k in keys}
-        for i in xrange(len(b)):
+        for i in range(len(b)):
             chosen = choose_n_objects(ip[i], b[i], p[i], max_objects, choice_fun)
             for l, k in zip(chosen, keys):
                 new_data[k].extend(l)
@@ -245,7 +245,7 @@ def read_imgs(arr, paths, img_store):
         for i, p in enumerate(paths):
             arr[i] = img_store[p]
     except Exception as e:
-        print e
+        print(e)
         raise
 
 
@@ -262,7 +262,7 @@ def pad_bbox(bboxes, num_objects):
         for i, b in enumerate(bboxes):
             bbox[i, :b.shape[0]] = b
     except Exception as e:
-        print e
+        print(e)
         raise
 
     return bbox
@@ -301,8 +301,8 @@ def process_entry(d, n_objects, img_store, depth_folder=None, bbox_scale=1.):
     del d['img_path']
 
     if d['mirror']:
-        for t in xrange(imgs.shape[0]):
-            for c in xrange(imgs.shape[-1]):
+        for t in range(imgs.shape[0]):
+            for c in range(imgs.shape[-1]):
                 imgs[t, ..., c] = np.fliplr(imgs[t, ..., c])
 
         for i, b in enumerate(bbox):

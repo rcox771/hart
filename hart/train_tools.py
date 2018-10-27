@@ -23,7 +23,7 @@ import itertools
 import tensorflow as tf
 from tensorflow.python.ops import gen_math_ops
 
-from neurocity.tools.params import num_trainable_params
+from hart.neurocity.tools.params import num_trainable_params
 
 
 def with_session(f):
@@ -110,7 +110,7 @@ class TrainSchedule(object):
             self.train_store.set_length(self.n_timesteps, sess)
             self._update_intervals()
 
-            print self.train_stats()
+            print( self.train_stats())
         except AttributeError:
             pass
 
@@ -138,17 +138,17 @@ class TrainSchedule(object):
             self.save_interval = max(self.min_save_interval, self.logging_interval)
 
     def __iter__(self):
-        print 'Starting training at iter {}'.format(self.n_iter)
-        print self.train_stats()
-        print 'Num of trainable parameters:', num_trainable_params()
+        print('Starting training at iter {}'.format(self.n_iter))
+        print( self.train_stats())
+        print( 'Num of trainable parameters:', num_trainable_params())
 
         for self.n_epoch in itertools.count(self.n_epoch + 1):
             self.n_epochs_per_timestep += 1
             if self.max_n_epochs and self.n_epoch > self.max_n_epochs:
-                print 'Finishing training after {} epochs'.format(self.max_n_epochs)
+                print( 'Finishing training after {} epochs'.format(self.max_n_epochs))
                 break
 
-            for self.n_iter in xrange(self.n_iter + 1, self.n_iter + self.n_batches_per_epoch + 1):
+            for self.n_iter in range(self.n_iter + 1, self.n_iter + self.n_batches_per_epoch + 1):
                 self.n_iter_per_timestep += 1
                 yield self.n_iter
 
@@ -205,7 +205,7 @@ class AdaptiveLoss(dict):
             if weight_name in self.weight_vars:
                 assign_dict[k] = self.weight_vars[weight_name].assign(v ** .5)
             else:
-                print 'Weight for loss "{}" is not adaptive. Skipping'.format(k)
+                print( 'Weight for loss "{}" is not adaptive. Skipping'.format(k))
 
         return assign_dict
 

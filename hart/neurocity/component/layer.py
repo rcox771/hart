@@ -25,7 +25,7 @@ import tensorflow as tf
 from tensorflow.python.util import nest
 import numpy as np
 
-from neurocity.component.model import base
+from hart.neurocity.component.model import base
 
 
 def pad_shape(shape):
@@ -448,7 +448,7 @@ class DynamicFilterConvLayer(Layer):
         else:  # split by images in batch and map to regular conv2d function
             inpt = tf.expand_dims(self.inpt, 1)
 
-            filt_shape = [-1, self.ksize[0], self.ksize[1], self.n_cin, self.n_filters]
+            filt_shape = tuple(map(int, [-1, self.ksize[0], self.ksize[1], self.n_cin, self.n_filters]))
             filt = tf.reshape(self.filters, filt_shape)
             elems = (inpt, filt)
             result = tf.map_fn(lambda x: tf.nn.conv2d(x[0], x[1],
